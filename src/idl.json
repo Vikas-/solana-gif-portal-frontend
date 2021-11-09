@@ -3,12 +3,12 @@
   "name": "myepicproject",
   "instructions": [
     {
-      "name": "startStuffOff",
+      "name": "newList",
       "accounts": [
         {
           "name": "baseAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "user",
@@ -21,7 +21,12 @@
           "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "bump",
+          "type": "u8"
+        }
+      ]
     },
     {
       "name": "addGif",
@@ -30,12 +35,69 @@
           "name": "baseAccount",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "listOwner",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true
         }
       ],
       "args": [
         {
-          "name": "gifLink",
+          "name": "url",
           "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "upvoteGif",
+      "accounts": [
+        {
+          "name": "baseAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "user",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": [
+        {
+          "name": "url",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "sendSol",
+      "accounts": [
+        {
+          "name": "from",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "to",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
         }
       ]
     }
@@ -47,16 +109,20 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "totalGifs",
-            "type": "u64"
+            "name": "bump",
+            "type": "u8"
           },
           {
-            "name": "gifList",
+            "name": "gifs",
             "type": {
               "vec": {
-                "defined": "ItemStruct"
+                "defined": "GifItem"
               }
             }
+          },
+          {
+            "name": "totalGifs",
+            "type": "u64"
           }
         ]
       }
@@ -64,20 +130,31 @@
   ],
   "types": [
     {
-      "name": "ItemStruct",
+      "name": "GifItem",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "gifLink",
+            "name": "url",
             "type": "string"
           },
           {
-            "name": "userAddress",
+            "name": "adder",
             "type": "publicKey"
+          },
+          {
+            "name": "votes",
+            "type": "u64"
           }
         ]
       }
+    }
+  ],
+  "errors": [
+    {
+      "code": 300,
+      "name": "NoItemFound",
+      "msg": "No item with that url found"
     }
   ],
   "metadata": {
